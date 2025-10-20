@@ -20,7 +20,8 @@ public class CorsGlobalConfiguration {
         corsConfig.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:3001",
-                "http://127.0.0.1:3000"
+                "http://127.0.0.1:3000",
+                "https://fare-calculator-web-app-pcto.vercel.app"
         ));
 
         // Méthodes HTTP autorisées
