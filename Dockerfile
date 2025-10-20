@@ -1,5 +1,5 @@
 # Étape 1 : Build avec Maven + JDK 21
-FROM maven:3.9.6-eclipse-temurin-23 AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copier uniquement les fichiers nécessaires pour optimiser le cache
@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Étape 2 : Image finale uniquement avec le JDK
-FROM eclipse-temurin:23-jdk
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Copier seulement le JAR final
