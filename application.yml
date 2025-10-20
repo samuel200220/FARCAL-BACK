@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://dpg-d3qqu68gjchc73bifq20-a.oregon-postgres.render.com/farcal
+    username: farcal_user
+    password: 's7iUXvdOd6jzvTHowfI3BAXMpardQQ3E'
+
+  sql:
+    init:
+      mode: never  # Changé de 'always' à 'never'
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+    io.r2dbc.postgresql: DEBUG
+
+server:
+  port: ${PORT:8080}
