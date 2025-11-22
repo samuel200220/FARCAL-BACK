@@ -55,6 +55,25 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+		<!-- 🔐 SPRING SECURITY (obligatoire pour OAuth2) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- 🔑 OAUTH2 CLIENT (Google OAuth2 Login) -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-client</artifactId>
+		</dependency>
+
+		<!-- 📄 Pour valider les tokens ID Google (OpenID Connect) -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
+
+
 		<!-- ⚙️ Lombok (facultatif mais utile pour réduire le code) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
