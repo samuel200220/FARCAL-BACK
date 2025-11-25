@@ -29,6 +29,7 @@ public class SecurityConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/api/**").permitAll()
                         .pathMatchers("/auth/**").permitAll()
                         .anyExchange().authenticated()
                 )
@@ -48,6 +49,7 @@ public class SecurityConfig {
                                         exchange.getResponse().setStatusCode(HttpStatus.FOUND);
                                         exchange.getResponse().getHeaders().setLocation(
                                                 URI.create("https://fare-calculator-web-app-pcto.vercel.app/accueil")
+//                                                URI.create("http://localhost:3000/accueil")
                                         );
                                     })
                             ).then();

@@ -73,6 +73,11 @@
 			<artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 
 		<!-- ⚙️ Lombok (facultatif mais utile pour réduire le code) -->
 		<dependency>
