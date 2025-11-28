@@ -49,7 +49,7 @@ public class SecurityConfig {
                                         exchange.getResponse().setStatusCode(HttpStatus.FOUND);
                                         exchange.getResponse().getHeaders().setLocation(
                                                 URI.create("https://fare-calculator-web-app-pcto.vercel.app/accueil")
-//                                                URI.create("http://localhost:3000/accueil")
+//                                               URI.create("http://localhost:3000/accueil")
                                         );
                                     })
                             ).then();

@@ -5,6 +5,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table("utilisateur_simple")
@@ -12,12 +13,27 @@ public class UtilisateurSimple {
 
     @Id
     private UUID id;
+
     @Column("nom")
     private String nom;
+
     @Column("email")
     private String email;
+
     @Column("date_creation")
     private Instant dateCreation;
+
+    @Column("email_verifie")
+    private Boolean emailVerifie = false;
+
+    @Column("code_verification")
+    private String codeVerification;
+
+    @Column("expiration_code")
+    private LocalDateTime expirationCode;
+
+    @Column("provider")
+    private String provider = "local"; // "local" ou "google"
 
     public UtilisateurSimple() {}
 
@@ -26,6 +42,14 @@ public class UtilisateurSimple {
         this.nom = nom;
         this.email = email;
         this.dateCreation = dateCreation;
+        this.emailVerifie = false;
+        this.provider = "local";
+    }
+
+    // Getters et Setters existants...
+
+    public Boolean getEmailVerifie() {
+        return emailVerifie;
     }
 
     public UUID getId() {
@@ -58,5 +82,33 @@ public class UtilisateurSimple {
 
     public void setDateCreation(Instant dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public void setEmailVerifie(Boolean emailVerifie) {
+        this.emailVerifie = emailVerifie;
+    }
+
+    public String getCodeVerification() {
+        return codeVerification;
+    }
+
+    public void setCodeVerification(String codeVerification) {
+        this.codeVerification = codeVerification;
+    }
+
+    public LocalDateTime getExpirationCode() {
+        return expirationCode;
+    }
+
+    public void setExpirationCode(LocalDateTime expirationCode) {
+        this.expirationCode = expirationCode;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }

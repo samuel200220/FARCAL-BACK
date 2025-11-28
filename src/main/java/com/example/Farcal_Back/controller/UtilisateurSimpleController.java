@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -71,6 +72,17 @@ public class UtilisateurSimpleController {
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                 });
     }
+
+    // Ajoutez cette méthode dans UtilisateurSimpleController
+//    @PostMapping("/check-email")
+//    public Mono<ResponseEntity<Map<String, Object>>> checkEmailExists(@RequestBody Map<String, String> request) {
+//        String email = request.get("email");
+//        logger.info("Vérification de l'existence de l'email: {}", email);
+//
+//        return repository.existsByEmail(email)
+//                .map(exists -> ResponseEntity.ok(Map.of("exists", exists)))
+//                .defaultIfEmpty(ResponseEntity.ok(Map.of("exists", false)));
+//    }
 
     // Endpoint de santé pour vérifier si l'API fonctionne
     @GetMapping("/health")

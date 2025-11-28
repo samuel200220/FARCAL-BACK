@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Service
 public class CustomUserService {
@@ -21,12 +20,25 @@ public class CustomUserService {
         return repo.findByEmail(email)
                 .switchIfEmpty(
                         repo.save(new UtilisateurSimple(
-                                null,              // 👈 IMPORTANT : laisser null
+                                null,
                                 nom,
                                 email,
                                 Instant.now()
-                        ))
-                );
+                        )).doOnSuccess(user -> {
+                            // Pour les utilisateurs OAuth2, marquer l'email comme vérifié directement
+                            user.setEmailVerifie(true);
+                            user.setProvider("google");
+                            repo.save(user).subscribe();
+                        })
+                )
+                .flatMap(user -> {
+                    // Si l'utilisateur existe mais n'est pas marqué comme OAuth2, le mettre à jour
+                    if (!"google".equals(user.getProvider())) {
+                        user.setProvider("google");
+                        user.setEmailVerifie(true); // Les emails OAuth2 sont considérés comme vérifiés
+                        return repo.save(user);
+                    }
+                    return Mono.just(user);
+                });
     }
-
 }

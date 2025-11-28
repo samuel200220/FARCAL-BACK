@@ -12,4 +12,7 @@ public interface UtilisateurSimpleRepository extends ReactiveCrudRepository<Util
 
     @Query("SELECT * FROM utilisateur_simple WHERE email = :email LIMIT 1")
     Mono<UtilisateurSimple> findByEmail(@Param("email") String email);
+
+    @Query("SELECT COUNT(*) > 0 FROM utilisateur_simple WHERE email = :email")
+    Mono<Boolean> existsByEmail(@Param("email") String email);
 }
