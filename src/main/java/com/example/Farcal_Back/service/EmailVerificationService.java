@@ -82,7 +82,7 @@ public class EmailVerificationService {
                             "Si vous n'avez pas créé de compte, ignorez cet email.\n\n" +
                             "Cordialement,\nL'équipe Farcal"
             );
-            message.setFrom("noreply@farcal.com");
+            message.setFrom("samuelftagat@gmail.com");
 
             mailSender.send(message);
             System.out.println("✅ Email simple envoyé à : " + toEmail);

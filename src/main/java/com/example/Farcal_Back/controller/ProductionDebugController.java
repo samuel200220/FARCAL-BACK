@@ -47,8 +47,8 @@ public class ProductionDebugController {
             // Informations système
             result.put("environment", "PRODUCTION");
             result.put("timestamp", LocalDateTime.now().toString());
-            result.put("gmail_username_set", System.getenv("GMAIL_USERNAME") != null);
-            result.put("gmail_password_set", System.getenv("GMAIL_APP_PASSWORD") != null);
+            result.put("gmail_username_set", System.getenv("EMAIL_USERNAME") != null);
+            result.put("gmail_password_set", System.getenv("EMAIL_PASSWORD") != null);
 
             return result;
         }).subscribeOn(Schedulers.boundedElastic());
