@@ -37,74 +37,64 @@ public class EmailVerificationService {
 
     public Mono<Boolean> sendVerificationEmail(String toEmail, String code) {
         return Mono.fromCallable(() -> {
-                    System.out.println("🚀 Début envoi email à: " + toEmail);
+            try {
+                return sendHtmlEmail(toEmail, code);
+            } catch (Exception e) {
+                System.err.println("❌ Erreur email HTML: " + e.getMessage());
+                // Fallback vers email simple
+                return sendSimpleEmail(toEmail, code);
+            }
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
 
-                    // Essayer d'abord l'email simple (plus fiable sur Render)
-                    boolean simpleSuccess = sendSimpleEmail(toEmail, code);
-                    if (simpleSuccess) {
-                        return true;
-                    }
+    private boolean sendHtmlEmail(String toEmail, String code) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8"); // false = pas multipart
 
-                    // Si simple échoue, essayer HTML
-                    System.out.println("🔄 Essai avec email HTML...");
-                    return sendHtmlEmail(toEmail, code);
+            helper.setTo(toEmail);
+            helper.setSubject("🔐 Vérification de votre email - Farcal");
+            helper.setFrom("samuelftagat@gmail.com", "Farcal_Prod");
 
-                }).subscribeOn(Schedulers.boundedElastic())
-                .timeout(java.time.Duration.ofSeconds(15))
-                .onErrorReturn(false);
+            String htmlContent = buildHtmlEmailContent(code);
+            helper.setText(htmlContent, true); // true = HTML
+
+            mailSender.send(mimeMessage);
+            System.out.println("✅ Email HTML envoyé avec succès à : " + toEmail);
+            return true;
+        } catch (MessagingException e) {
+            System.err.println("❌ Erreur MIME: " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.err.println("❌ Erreur générale: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean sendSimpleEmail(String toEmail, String code) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
-            message.setSubject("Farcal - Code de vérification: " + code);
+            message.setSubject("Code de vérification Farcal");
             message.setText(
-                    "─────────────────────────────────────\n" +
-                            "           🚗 FARCAL\n" +
-                            "─────────────────────────────────────\n\n" +
-                            "Votre code de vérification : " + code + "\n\n" +
-                            "⏰ Valable 10 minutes\n\n" +
-                            "Merci pour votre inscription !\n\n" +
-                            "Cordialement,\n" +
-                            "L'équipe Farcal\n\n" +
-                            "🌐 https://fare-calculator-web-app-pcto.vercel.app\n" +
-                            "─────────────────────────────────────"
+                    "Votre code de vérification Farcal est : " + code + "\n\n" +
+                            "Ce code expire dans 10 minutes.\n\n" +
+                            "Si vous n'avez pas créé de compte, ignorez cet email.\n\n" +
+                            "Cordialement,\nL'équipe Farcal"
             );
-            // Utiliser l'email réel de Gmail comme expéditeur
-            message.setFrom("samuelftagat@gmail.com");
+            message.setFrom("noreply@farcal.com");
 
             mailSender.send(message);
-            System.out.println("✅ Email simple envoyé avec succès à: " + toEmail);
+            System.out.println("✅ Email simple envoyé à : " + toEmail);
             return true;
         } catch (Exception e) {
-            System.err.println("❌ Échec email simple: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+            System.err.println("❌ Échec email simple: " + e.getMessage());
             return false;
         }
     }
 
-    private boolean sendHtmlEmail(String toEmail, String code) {
-        try {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-
-            helper.setTo(toEmail);
-            helper.setSubject("Vérification Farcal - Code: " + code);
-            helper.setFrom("samuelftagat@gmail.com", "Équipe Farcal");
-
-            String htmlContent = buildSimpleHtmlEmail(code);
-            helper.setText(htmlContent, true);
-
-            mailSender.send(mimeMessage);
-            System.out.println("✅ Email HTML envoyé avec succès à: " + toEmail);
-            return true;
-        } catch (Exception e) {
-            System.err.println("❌ Échec email HTML: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-            return false;
-        }
-    }
-
-    private String buildSimpleHtmlEmail(String code) {
+    private String buildHtmlEmailContent(String code) {
+        // Version simplifiée du HTML pour éviter les problèmes d'encodage
         return """
             <!DOCTYPE html>
             <html>
