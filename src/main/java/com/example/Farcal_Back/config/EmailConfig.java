@@ -23,12 +23,9 @@ public class EmailConfig {
     @Value("${spring.mail.password}")
     private String password;
 
-<<<<<<< HEAD
-=======
     @Value("${spring.mail.protocol:smtp}")
     private String protocol;
 
->>>>>>> 2d88c5e (Correction des conflits)
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -37,19 +34,6 @@ public class EmailConfig {
         mailSender.setPort(port);
         mailSender.setUsername(username);
         mailSender.setPassword(password);
-<<<<<<< HEAD
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.starttls.required", "true");
-        props.put("mail.smtp.connectiontimeout", "5000");
-        props.put("mail.smtp.timeout", "5000");
-        props.put("mail.smtp.writetimeout", "5000");
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-=======
         mailSender.setProtocol(protocol);
 
         Properties props = mailSender.getJavaMailProperties();
@@ -73,7 +57,6 @@ public class EmailConfig {
         props.put("mail.smtp.connectiontimeout", "10000");
         props.put("mail.smtp.timeout", "10000");
         props.put("mail.smtp.writetimeout", "10000");
->>>>>>> 2d88c5e (Correction des conflits)
         props.put("mail.debug", "false");
 
         return mailSender;
