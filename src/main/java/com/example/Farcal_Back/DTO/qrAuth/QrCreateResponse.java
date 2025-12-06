@@ -1,13 +1,17 @@
 package com.example.Farcal_Back.DTO.qrAuth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-@AllArgsConstructor
 public class QrCreateResponse {
     private String tokenId;
-}
 
+    public QrCreateResponse(String tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public String getTokenId() {
+        return tokenId;
+    }
+
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
+    }
+}

@@ -1,17 +1,19 @@
 package com.example.Farcal_Back.repository.qrAuth;
 
 import com.example.Farcal_Back.model.qrAuth.QrAuthToken;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.TimeUnit;
 
 @Repository
-@RequiredArgsConstructor
 public class QrAuthRepositoryRedis {
 
     private final RedisTemplate<String, Object> redis;
+
+    public QrAuthRepositoryRedis(RedisTemplate<String, Object> redis) {
+        this.redis = redis;
+    }
 
     private String key(String id) {
         return "qr:" + id;
@@ -25,5 +27,3 @@ public class QrAuthRepositoryRedis {
         return (QrAuthToken) redis.opsForValue().get(key(id));
     }
 }
-
-

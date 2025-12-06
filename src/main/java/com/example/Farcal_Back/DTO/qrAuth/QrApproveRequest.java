@@ -1,11 +1,24 @@
 package com.example.Farcal_Back.DTO.qrAuth;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.UUID;
 
-@Setter
-@Getter
 public class QrApproveRequest {
     private String tokenId;
-    private Long userId;
+    private UUID userId;
+
+    public String getTokenId() {
+        return tokenId;
+    }
+
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 }

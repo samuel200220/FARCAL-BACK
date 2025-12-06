@@ -4,9 +4,7 @@ import com.example.Farcal_Back.DTO.qrAuth.QrApproveRequest;
 import com.example.Farcal_Back.service.qrAuth.HmacService;
 import com.example.Farcal_Back.service.qrAuth.QrAuthService;
 import com.example.Farcal_Back.model.qrAuth.QrAuthToken;
-import com.example.Farcal_Back.DTO.qrAuth.QrCheckResponse;
 import com.example.Farcal_Back.DTO.qrAuth.QrCreateResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -18,12 +16,16 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/auth/qr")
 public class QrAuthController {
 
     private final QrAuthService qrAuthService;
     private final HmacService hmacService;
+
+    public QrAuthController(QrAuthService qrAuthService, HmacService hmacService) {
+        this.qrAuthService = qrAuthService;
+        this.hmacService = hmacService;
+    }
 
     //Demande de l'app web pour creer le token securise
     @PostMapping("/create")
