@@ -31,12 +31,28 @@ public class CalculUtilisateurController {
     // 🔹 Sauvegarder un nouveau calcul
     @PostMapping
     public Mono<ResponseEntity<String>> save(@RequestBody CalculUtilisateur calcul) {
-        calcul.setId(UUID.randomUUID());
+
+        // ❌ NE PAS définir l'id ici
         calcul.setTimestamp(Instant.now());
+
         return repo.save(calcul)
                 .map(c -> ResponseEntity.ok("Calcul enregistré avec succès ✅"))
-                .onErrorResume(e ->
-                        Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .onErrorResume(e -> Mono.just(
+                        ResponseEntity
+                                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                                 .body("Erreur : " + e.getMessage())));
+    }
+
+    // 🔴 Supprimer un calcul par ID
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Void>> delete(@PathVariable UUID id) {
+        return repo.existsById(id)
+                .flatMap(exists -> {
+                    if (!exists) {
+                        return Mono.just(ResponseEntity.notFound().build());
+                    }
+                    return repo.deleteById(id)
+                            .then(Mono.just(ResponseEntity.noContent().build()));
+                });
     }
 }
