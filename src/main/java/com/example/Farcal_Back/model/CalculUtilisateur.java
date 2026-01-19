@@ -14,7 +14,7 @@ import java.util.UUID;
 public class CalculUtilisateur {
 
     @Id
-    private UUID id; // ✅ Généré côté Java avant insertion
+    private UUID id;
 
     @Column("id_utilisateur")
     private UUID idUtilisateur;
@@ -23,28 +23,61 @@ public class CalculUtilisateur {
     private Instant timestamp;
 
     @Column("lieu_depart")
-    @JsonProperty("lieu_depart")
+    @JsonProperty("lieuDepart")
     private String lieuDepart;
 
     @Column("lieu_arrivee")
-    @JsonProperty("lieu_arrivee")
+    @JsonProperty("lieuArrivee")
     private String lieuArrivee;
 
     @Column("heure_prise_en_charge")
-    @JsonProperty("heure_prise_en_charge")
+    @JsonProperty("heurePriseEnCharge")
     private LocalTime heurePriseEnCharge;
 
     @Column("distance_km")
-    @JsonProperty("distance_km")
+    @JsonProperty("distanceKm")
     private double distanceKm;
 
     @Column("cout_estime")
-    @JsonProperty("cout_estime")
+    @JsonProperty("coutEstime")
     private BigDecimal coutEstime;
 
     @Column("tarif_officiel")
-    @JsonProperty("tarif_officiel")
+    @JsonProperty("tarifOfficiel")
     private BigDecimal tarifOfficiel;
+
+    // Nouveaux champs pour les paramètres de calcul
+    @Column("jour_semaine")
+    @JsonProperty("jourSemaine")
+    private String jourSemaine;
+
+    @Column("jour_ferie")
+    @JsonProperty("jourFerie")
+    private String jourFerie;
+
+    @Column("pluie")
+    @JsonProperty("pluie")
+    private String pluie;
+
+    @Column("etat_route")
+    @JsonProperty("etatRoute")
+    private String etatRoute;
+
+    @Column("accident")
+    @JsonProperty("accident")
+    private String accident;
+
+    @Column("bagages")
+    @JsonProperty("bagages")
+    private String bagages;
+
+    @Column("routes_larges")
+    @JsonProperty("routesLarges")
+    private String routesLarges;
+
+    @Column("routes_travaux")
+    @JsonProperty("routesTravaux")
+    private String routesTravaux;
 
     // --- Getters / Setters ---
     public UUID getId() { return id; }
@@ -73,4 +106,28 @@ public class CalculUtilisateur {
 
     public BigDecimal getTarifOfficiel() { return tarifOfficiel; }
     public void setTarifOfficiel(BigDecimal tarifOfficiel) { this.tarifOfficiel = tarifOfficiel; }
+
+    public String getJourSemaine() { return jourSemaine; }
+    public void setJourSemaine(String jourSemaine) { this.jourSemaine = jourSemaine; }
+
+    public String getJourFerie() { return jourFerie; }
+    public void setJourFerie(String jourFerie) { this.jourFerie = jourFerie; }
+
+    public String getPluie() { return pluie; }
+    public void setPluie(String pluie) { this.pluie = pluie; }
+
+    public String getEtatRoute() { return etatRoute; }
+    public void setEtatRoute(String etatRoute) { this.etatRoute = etatRoute; }
+
+    public String getAccident() { return accident; }
+    public void setAccident(String accident) { this.accident = accident; }
+
+    public String getBagages() { return bagages; }
+    public void setBagages(String bagages) { this.bagages = bagages; }
+
+    public String getRoutesLarges() { return routesLarges; }
+    public void setRoutesLarges(String routesLarges) { this.routesLarges = routesLarges; }
+
+    public String getRoutesTravaux() { return routesTravaux; }
+    public void setRoutesTravaux(String routesTravaux) { this.routesTravaux = routesTravaux; }
 }

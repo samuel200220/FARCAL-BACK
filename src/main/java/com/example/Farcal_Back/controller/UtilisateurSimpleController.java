@@ -2,12 +2,15 @@ package com.example.Farcal_Back.controller;
 
 import com.example.Farcal_Back.model.UtilisateurSimple;
 import com.example.Farcal_Back.repository.UtilisateurSimpleRepository;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import com.example.Farcal_Back.service.JwtService;
 
 import java.time.Instant;
 import java.util.Map;
@@ -19,25 +22,32 @@ public class UtilisateurSimpleController {
 
     private static final Logger logger = LoggerFactory.getLogger(UtilisateurSimpleController.class);
     private final UtilisateurSimpleRepository repository;
+    private final JwtService jwtService;
 
-    public UtilisateurSimpleController(UtilisateurSimpleRepository repository) {
+    public UtilisateurSimpleController(UtilisateurSimpleRepository repository, JwtService jwtService) {
         this.repository = repository;
+        this.jwtService = jwtService;
     }
 
-    @PostMapping
-    public Mono<ResponseEntity<UtilisateurSimple>> create(@RequestBody UtilisateurSimple user) {
-        logger.info("Création d'un nouvel utilisateur: {}", user.getEmail());
+    @PostMapping("/register") // Renomme pour clarté
+    public Mono<ResponseEntity<Map<String, Object>>> register(@RequestBody UtilisateurSimple user) {
+        logger.info("Inscription d'un nouvel utilisateur: {}", user.getEmail());
 
-        // Ne pas définir l'ID manuellement, laisser R2DBC le gérer
         user.setDateCreation(Instant.now());
+        // TODO: Génére et envoie code de vérification par email (implémente si pas déjà fait)
 
         return repository.save(user)
-                .doOnSuccess(savedUser -> logger.info("Utilisateur créé avec succès: {}", savedUser.getId()))
-                .doOnError(error -> logger.error("Erreur lors de la création de l'utilisateur", error))
-                .map(savedUser -> ResponseEntity.status(HttpStatus.CREATED).body(savedUser))
-                .onErrorResume(error ->
-                        Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
-                );
+                .flatMap(savedUser -> {
+                    // Token temporaire (après vérif réelle, tu pourras le conditionner à emailVerifie == true)
+                    String token = jwtService.generateToken(savedUser.getId(), savedUser.getEmail());
+                    Map<String, Object> response = Map.of(
+                            "token", token,
+                            "user", savedUser,
+                            "id", savedUser.getId()
+                    );
+                    return Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(response));
+                })
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Email existe déjà"))));
     }
 
     @GetMapping("/{id}")
@@ -60,6 +70,18 @@ public class UtilisateurSimpleController {
                 })
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/me")
+    public Mono<ResponseEntity<UtilisateurSimple>> me(
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+
+        return repository.findById(userId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable UUID id) {
