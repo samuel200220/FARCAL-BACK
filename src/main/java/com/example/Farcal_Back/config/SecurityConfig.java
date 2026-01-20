@@ -41,6 +41,7 @@ public class SecurityConfig {
                                 "/api/utilisateurs/health",
                                 "/api/entreprises/**",
                                 "/api/calculs-utilisateur/**",
+                                "/api/contributions/**",
                                 "/auth/**"
                         ).permitAll()
                         .anyExchange().authenticated()
