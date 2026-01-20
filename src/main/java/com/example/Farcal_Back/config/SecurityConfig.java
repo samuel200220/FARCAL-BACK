@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 "/api/utilisateurs/register",
                                 "/api/utilisateurs/health",
                                 "/api/entreprises/**",
+                                "/api/calculs-utilisateur/**",
                                 "/auth/**"
                         ).permitAll()
                         .anyExchange().authenticated()
