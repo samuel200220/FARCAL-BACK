@@ -2,6 +2,8 @@ package com.example.Farcal_Back.controller;
 
 import com.example.Farcal_Back.model.UtilisateurSimple;
 import com.example.Farcal_Back.repository.UtilisateurSimpleRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
+@Tag(name = "AUTH_USER", description = "CRUD D'UN UTILISATEUR STANDARD")
 public class UtilisateurSimpleController {
 
     private static final Logger logger = LoggerFactory.getLogger(UtilisateurSimpleController.class);
@@ -29,6 +32,10 @@ public class UtilisateurSimpleController {
         this.jwtService = jwtService;
     }
 
+    @Operation(
+            summary = "Inscription d'un utilisateur standard",
+            description = "Enregistre un utilisateur dans la base de donnees"
+    )
     @PostMapping("/register") // Renomme pour clarté
     public Mono<ResponseEntity<Map<String, Object>>> register(@RequestBody UtilisateurSimple user) {
         logger.info("Inscription d'un nouvel utilisateur: {}", user.getEmail());
@@ -50,6 +57,7 @@ public class UtilisateurSimpleController {
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Email existe déjà"))));
     }
 
+    @Operation(summary = "Obtenir l'identifiant d'un utilisateur")
     @GetMapping("/{id}")
     public Mono<ResponseEntity<UtilisateurSimple>> getById(@PathVariable UUID id) {
         logger.info("Récupération de l'utilisateur par ID: {}", id);
@@ -59,6 +67,7 @@ public class UtilisateurSimpleController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Obtenir un utilisateur par son email")
     @GetMapping("/email/{email}")
     public Mono<ResponseEntity<UtilisateurSimple>> getByEmail(@PathVariable("email") String email) {
         logger.info("Récupération de l'utilisateur par email: {}", email);
@@ -71,6 +80,7 @@ public class UtilisateurSimpleController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Obtenir les informations d'un utilisateur")
     @GetMapping("/me")
     public Mono<ResponseEntity<UtilisateurSimple>> me(
             @AuthenticationPrincipal Jwt jwt
@@ -83,6 +93,7 @@ public class UtilisateurSimpleController {
     }
 
 
+    @Operation(summary = "Suppression d'un utilisateur")
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable UUID id) {
         logger.info("Suppression de l'utilisateur: {}", id);
@@ -107,6 +118,7 @@ public class UtilisateurSimpleController {
 //    }
 
     // Endpoint de santé pour vérifier si l'API fonctionne
+    @Operation(summary = "Endpoint de santé pour vérifier si l'API fonctionne")
     @GetMapping("/health")
     public Mono<ResponseEntity<String>> health() {
         return Mono.just(ResponseEntity.ok("API is running"));

@@ -1,5 +1,7 @@
 package com.example.Farcal_Back.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/debug")
+@Tag(name = "DEBOGAGE_PRODUCTION")
 public class ProductionDebugController {
 
     private final JavaMailSender mailSender;
@@ -22,6 +25,10 @@ public class ProductionDebugController {
         this.mailSender = mailSender;
     }
 
+    @Operation(
+            summary = "Test Email",
+            description = "Tester l'envoi de l'email sur la version deployée sur render"
+    )
     @GetMapping("/production-test")
     public Mono<Map<String, Object>> productionTest() {
         return Mono.fromCallable(() -> {

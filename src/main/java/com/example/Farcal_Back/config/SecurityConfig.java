@@ -36,6 +36,12 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/webjars/**"
+                        ).permitAll()
+                        .pathMatchers(
                                 "/api/auth/login",
                                 "/api/utilisateurs/register",
                                 "/api/utilisateurs/health",
@@ -44,7 +50,7 @@ public class SecurityConfig {
                                 "/api/contributions/**",
                                 "/auth/**"
                         ).permitAll()
-                        .anyExchange().authenticated()
+                        .anyExchange().permitAll()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt()) // JWT OK
                 .oauth2Login(oauth -> oauth.authenticationSuccessHandler((webFilterExchange, authentication) -> {

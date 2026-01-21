@@ -3,6 +3,8 @@ package com.example.Farcal_Back.controller;
 import com.example.Farcal_Back.repository.UtilisateurSimpleRepository;
 import com.example.Farcal_Back.model.UtilisateurSimple;
 import com.example.Farcal_Back.service.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "LOGIN_USER")
 public class AuthController {
 
     private final UtilisateurSimpleRepository repository;
@@ -29,6 +32,10 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
+    @Operation(
+            summary = "Authentification via Token",
+            description = "Connexion plus génération du token"
+    )
     @PostMapping("/login")
     public Mono<ResponseEntity<Map<String, Object>>> login(
             @RequestBody Map<String, String> request
@@ -55,6 +62,10 @@ public class AuthController {
                 );
     }
 
+    @Operation(
+            summary = "Recuperes les informations utilisateur",
+            description = "Recupérer les informations d'un utilisateur à l'aide du token géneré lors de la connexion à son compte"
+    )
     @GetMapping("/me")
     public Mono<ResponseEntity<UtilisateurSimple>> me(
             @AuthenticationPrincipal Jwt jwt

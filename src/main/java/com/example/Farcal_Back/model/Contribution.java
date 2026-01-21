@@ -1,5 +1,6 @@
 package com.example.Farcal_Back.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -7,6 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
+@Schema(description = "Objet contribution")
 @Table("contributions")
 public class Contribution {
 

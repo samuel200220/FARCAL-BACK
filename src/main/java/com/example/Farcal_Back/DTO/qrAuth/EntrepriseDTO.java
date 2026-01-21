@@ -1,9 +1,12 @@
 package com.example.Farcal_Back.DTO.qrAuth;
 
 import com.example.Farcal_Back.model.Entreprise;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.Instant;
 import java.util.UUID;
 
+@Schema(description = "Représente les infos d'une entreprise utilisées par le frontend")
 public class EntrepriseDTO {
 
     private UUID id;

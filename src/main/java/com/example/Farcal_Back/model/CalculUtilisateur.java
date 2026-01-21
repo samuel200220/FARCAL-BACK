@@ -1,6 +1,7 @@
 package com.example.Farcal_Back.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.relational.core.mapping.Column;
@@ -10,6 +11,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.util.UUID;
 
+@Schema(description = "Objet Calcul")
 @Table("calculs_utilisateur")
 public class CalculUtilisateur {
 

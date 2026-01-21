@@ -5,6 +5,8 @@ import com.example.Farcal_Back.DTO.qrAuth.EntrepriseDTO;
 import com.example.Farcal_Back.model.Entreprise;
 import com.example.Farcal_Back.repository.EntrepriseRepository;
 import com.example.Farcal_Back.service.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/entreprises")
+@Tag(name = "AUTH_ENTREPRISE", description = "CRUD D'UNE ENTREPRISE")
 public class EntrepriseController {
 
     private static final Logger logger = LoggerFactory.getLogger(EntrepriseController.class);
@@ -33,12 +36,18 @@ public class EntrepriseController {
 
     /* ===================== CRUD ===================== */
 
+    @Operation(
+            summary = "Lister toutes les entreprises"
+    )
     @GetMapping
     public Flux<EntrepriseDTO> all() {
         return repository.findAll()
                 .map(EntrepriseDTO::fromEntity);
     }
 
+    @Operation(
+            summary = "Création d'une entreprise"
+    )
     @PostMapping
     public Mono<ResponseEntity<EntrepriseDTO>> create(@RequestBody Entreprise entreprise) {
         entreprise.setDateCreation(Instant.now());
@@ -51,6 +60,9 @@ public class EntrepriseController {
                 );
     }
 
+    @Operation(
+            summary = "Obtenir une entreprise par son identifiant"
+    )
     @GetMapping("/{id}")
     public Mono<ResponseEntity<Entreprise>> getById(@PathVariable UUID id) {
         return repository.findById(id)
@@ -58,6 +70,9 @@ public class EntrepriseController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @Operation(
+            summary = "Suppression d'une entreprise"
+    )
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable UUID id) {
         return repository.deleteById(id)
@@ -66,6 +81,10 @@ public class EntrepriseController {
 
     /* ===================== AUTH ===================== */
 
+    @Operation(
+            summary = "Connexion d'une entreprise",
+            description = "Endpoint pour la connexion à un compte d'une entreprise"
+    )
     @PostMapping("/login")
     public Mono<ResponseEntity<?>> login(@RequestBody LoginRequest request) {
 
@@ -93,6 +112,10 @@ public class EntrepriseController {
 
     /* ===================== CURRENT USER ===================== */
 
+    @Operation(
+            summary = "Recupération d'une entreprise",
+            description = "Connaitre les informations de l'entreprise courante(connectée)"
+    )
     @GetMapping("/me")
     public Mono<ResponseEntity<EntrepriseDTO>> me(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
@@ -112,6 +135,7 @@ public class EntrepriseController {
 
     /* ===================== HEALTH ===================== */
 
+    @Operation(summary = "Endpoint de santé pour vérifier si l'API fonctionne")
     @GetMapping("/health")
     public Mono<ResponseEntity<String>> health() {
         return Mono.just(ResponseEntity.ok("Entreprise API is running"));

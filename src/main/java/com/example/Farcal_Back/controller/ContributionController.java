@@ -4,6 +4,8 @@ import com.example.Farcal_Back.DTO.qrAuth.ContributionRequest;
 import com.example.Farcal_Back.model.Contribution;
 import com.example.Farcal_Back.repository.ContributionRepository;
 import com.example.Farcal_Back.repository.UtilisateurSimpleRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/contributions")
+@Tag(name = "CONTRIBUTIONS", description = "ENDPOINT POUR LES CONTRIBUTIONS")
 public class ContributionController {
 
     private static final Logger logger =
@@ -37,6 +40,7 @@ public class ContributionController {
 
     /* ===================== CREATE ===================== */
 
+    @Operation(summary = "Création d'une contribution")
     @PostMapping
     public Mono<ResponseEntity<Contribution>> saveContribution(
             @RequestBody ContributionRequest req,
@@ -87,6 +91,7 @@ public class ContributionController {
 
     /* ===================== GET ALL ===================== */
 
+    @Operation(summary = "Obtenir toutes les contributions")
     @GetMapping
     public Flux<Contribution> getAllContributions(@AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getClaim("email");
@@ -106,6 +111,7 @@ public class ContributionController {
 
     /* ===================== GET ONE ===================== */
 
+    @Operation(summary = "Obtenir toutes les contributions d'un utilisateur")
     @GetMapping("/{id}")
     public Mono<ResponseEntity<Contribution>> getContributionById(
             @PathVariable UUID id,
@@ -140,6 +146,7 @@ public class ContributionController {
 
     /* ===================== UPDATE ===================== */
 
+    @Operation(summary = "Update une contribution d'un utilisateur")
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Object>> updateContribution(
             @PathVariable UUID id,
@@ -192,6 +199,7 @@ public class ContributionController {
 
     /* ===================== DELETE ===================== */
 
+    @Operation(summary = "Suppression d'une contribution d'un utilisateur")
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<?>> deleteContribution(
             @PathVariable UUID id,
